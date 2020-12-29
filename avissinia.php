@@ -9,22 +9,31 @@ require_once 'users.php';
 $method = $_SERVER['REQUEST_METHOD'];
 $request = explode('/', trim($_SERVER['PATH_INFO'], '/'));
 $input = json_decode(file_get_contents('php://input'), true);
-if (isset($_SERVER['HTTP_X_TOKEN'])) {
-	$input['token'] = $_SERVER['HTTP_X_TOKEN'];
-}
+$headers = getallheaders();
+$auth_header = $headers['Authorization'];
+
+// if (isset($_SERVER['HTTP_X_TOKEN'])) {
+// 	$input['token'] = $_SERVER['HTTP_X_TOKEN'];
+// }
 
 $r = array_shift($request);
 
 switch ($r) {
-    case 'register':
+    case 'register':  // Register a user
         if ($method == 'POST') {
-            register($method, $request, $input); // /register
+            register($method, $request, $input);
         } 
-        
-    case 'login':
-        if ($method == "POST") {
-            login($method, $request, $input); // /login
+        break;
+    case 'login': // Login a user
+        if ($method == 'POST') {
+            login($method, $request, $input); 
         }
+        break;
+    case 'authorized': // Returns if user is authorized
+        if ($method == 'POST') {
+            echo json_encode(is_authorized($auth_header));
+        }
+        break;
     default:  
         // header('HTTP/1.1 404 Not Found');
         exit;

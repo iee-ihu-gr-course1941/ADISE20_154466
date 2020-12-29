@@ -93,4 +93,21 @@ function token_return($username, $password) {
     return $token;
 }
 
+function is_authorized($auth_header) {
+    global $mysqli_connection;
+    $sql = 'SELECT * FROM player WHERE token=?';
+    $stmt = $mysqli_connection->prepare($sql);
+    $stmt->bind_param('s', $auth_header);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    if ($res->num_rows == 1){
+        return true;
+    } else {
+        header('WWW-Authenticate: Basic realm="My Realm"');
+        header('HTTP/1.0 401 Unauthorized');
+        echo 'User Unauthorized';
+        return false;
+    }
+}
+
 ?>
