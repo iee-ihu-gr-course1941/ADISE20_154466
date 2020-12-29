@@ -10,7 +10,6 @@ $method = $_SERVER['REQUEST_METHOD'];
 $request = explode('/', trim($_SERVER['PATH_INFO'], '/'));
 $input = json_decode(file_get_contents('php://input'), true);
 $headers = getallheaders();
-$auth_header = $headers['Authorization'];
 
 // if (isset($_SERVER['HTTP_X_TOKEN'])) {
 // 	$input['token'] = $_SERVER['HTTP_X_TOKEN'];
@@ -31,7 +30,7 @@ switch ($r) {
         break;
     case 'authorized': // Returns if user is authorized
         if ($method == 'POST') {
-            echo json_encode(is_authorized($auth_header));
+            echo json_encode(is_authorized($headers));
         }
         break;
     default:  

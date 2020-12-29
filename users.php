@@ -93,7 +93,8 @@ function token_return($username, $password) {
     return $token;
 }
 
-function is_authorized($auth_header) {
+function is_authorized($headers) {
+    $auth_header = $headers['Authorization'];
     global $mysqli_connection;
     $sql = 'SELECT * FROM player WHERE token=?';
     $stmt = $mysqli_connection->prepare($sql);
