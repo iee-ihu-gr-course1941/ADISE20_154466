@@ -111,4 +111,15 @@ function is_authorized($headers) {
     }
 }
 
+function find_players_id_by_token($p_token) {
+    global $mysqli_connection;
+    $sql = 'SELECT * FROM player WHERE token=?';
+    $stmt = $mysqli_connection->prepare($sql);
+    $stmt->bind_param('s', $p_token);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    $p_id = $res->fetch_row()[0];
+    return $p_id;
+}
+
 ?>

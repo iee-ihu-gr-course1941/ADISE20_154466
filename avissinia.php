@@ -3,7 +3,7 @@
 ini_set('display_errors','on' );
 require_once 'db_connect.php';
 require_once 'users.php';
-// require_once 'game.php';
+require_once 'game.php';
 
 
 $method = $_SERVER['REQUEST_METHOD'];
@@ -33,7 +33,11 @@ switch ($r) {
             echo json_encode(is_authorized($headers));
         }
         break;
-    default:  
+    case 'new-game': // Creates and sets game
+        if ($method == 'POST') {
+            new_game($input);
+        }
+    default:
         // header('HTTP/1.1 404 Not Found');
         exit;
 }
