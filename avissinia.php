@@ -1,6 +1,6 @@
 <?php
  
-ini_set('display_errors','on' );
+ini_set('display_errors', 'on');
 require_once 'db_connect.php';
 require_once 'users.php';
 require_once 'game.php';
@@ -37,6 +37,12 @@ switch ($r) {
         if ($method == 'POST') {
             new_game($input);
         }
+        break;
+    case 'start-game': // Starts game and sharing cards
+        if ($method == 'POST') {
+            start_game($input);
+        }
+        break;
     default:
         // header('HTTP/1.1 404 Not Found');
         exit;

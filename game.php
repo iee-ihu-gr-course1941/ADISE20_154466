@@ -40,13 +40,6 @@ function new_game($input) {
 	$stmt4->bind_param('ii', $deck_id, $game_id);
   $stmt4->execute();
 
-  
-  $sql5 = 'INSERT INTO round (deck_id, game_id, deck_card) VALUES (?, ?, ?)';
-  $stmt5 = $mysqli_connection->prepare($sql5);
-  $deck_card = '';
-  $stmt5->bind_param('iis', $deck_id, $game_id, $deck_card);
-  $stmt5->execute();
-
   print json_encode([
     'game_id' => $game_id, 
     'deck_id' => $deck_id,
@@ -54,6 +47,56 @@ function new_game($input) {
     'player2_id' => $player2_id,
     'message' => 'New game was set.'
   ]);
+}
+
+function start_game($input) {
+  global $mysqli_connection;
+
+  $game_id = $input['game_id'];
+  $game_status = 'ingame';
+  $sql = 'UPDATE game SET game_status = ? WHERE id = ?';
+	$stmt = $mysqli_connection->prepare($sql);
+	$stmt->bind_param('si', $game_status, $game_id);
+  $stmt->execute();
+  
+  // 'S': 'SPADES', 'D': 'DIAMONDS', 'H': 'HEARTS', 'C': 'CLUBS', 
+  // '0': '10',
+  // 'A': 'ACE', 'J': 'JACK', 'Q': 'QUEEN', 'K': 'KING', 
+  $deck = array(
+    'AS', '2S', '3S', '4S', '5S', '6S', '7S', '8S', '9S', '0S', 'JS', 'QS', 'KS',
+    'AD', '2D', '3D', '4D', '5D', '6D', '7D', '8D', '9D', '0D', 'JD', 'QD', 'KD',
+    'AC', '2C', '3C', '4C', '5C', '6C', '7C', '8C', '9C', '0C', 'JC', 'QC', 'KC',
+    'AH', '2H', '3H', '4H', '5H', '6H', '7H', '8H', '9H', '0H', 'JH', 'QH', 'KH'
+  );
+  shuffle($deck);
+  $deck_id = $input['deck_id'];
+  while ($deck_card = array_pop($deck)) {
+    if (count($deck) >= 46) {
+      $deck_status1 = 'p1_hand';
+      $sql1 = 'INSERT INTO round (deck_id, game_id, deck_card, deck_status) VALUES (?, ?, ?, ?)';
+      $stmt1 = $mysqli_connection->prepare($sql1);
+      $stmt1->bind_param('iiss', $deck_id, $game_id, $deck_card, $deck_status1);
+      $stmt1->execute();
+    } else if (count($deck) >= 40) {
+      $deck_status2 = 'p2_hand';
+      $sql2 = 'INSERT INTO round (deck_id, game_id, deck_card, deck_status) VALUES (?, ?, ?, ?)';
+      $stmt2 = $mysqli_connection->prepare($sql2);
+      $stmt2->bind_param('iiss', $deck_id, $game_id, $deck_card, $deck_status2);
+      $stmt2->execute();
+    } else if (count($deck) >= 36) {
+      $deck_status3 = 'board';
+      $sql3 = 'INSERT INTO round (deck_id, game_id, deck_card, deck_status) VALUES (?, ?, ?, ?)';
+      $stmt3 = $mysqli_connection->prepare($sql3);
+      $stmt3->bind_param('iiss', $deck_id, $game_id, $deck_card, $deck_status3);
+      $stmt3->execute();
+    } else {
+      $deck_status4 = 'deck';
+      $sql4 = 'INSERT INTO round (deck_id, game_id, deck_card, deck_status) VALUES (?, ?, ?, ?)';
+      $stmt4 = $mysqli_connection->prepare($sql4);
+      $stmt4->bind_param('iiss', $deck_id, $game_id, $deck_card, $deck_status4);
+      $stmt4->execute();
+    }
+  }
 }
 
 ?>
