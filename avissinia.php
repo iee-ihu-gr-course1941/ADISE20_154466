@@ -33,6 +33,11 @@ switch ($r) {
             echo json_encode(is_authorized($headers));
         }
         break;
+    case 'profile':
+        if ($method == 'GET') { // Returns object contains id, username, last_action
+            profile();
+        }
+        break;
     case 'new-game': // Creates and sets game
         if ($method == 'POST') {
             new_game($input);

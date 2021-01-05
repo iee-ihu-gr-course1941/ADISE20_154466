@@ -51,12 +51,31 @@ function login($method, $request, $input) {
     $res = $stmt->get_result();
     if ($res->fetch_row()[1] == $username) { // not efficient way
         $token = token_return($username, $password);
-        header("HTTP/1.1 200 OK");
+        header('HTTP/1.1 200 OK');
         print json_encode(['token'=> $token]);
     } else {
-        header("HTTP/1.1 400 Bad Request");
-        print json_encode(['errormesg'=>'Username or password is wrong.']);
+        header('HTTP/1.1 400 Bad Request');
+        print json_encode(['errormesg' =>' Username or password is wrong.'], JSON_PRETTY_PRINT);
         exit;
+    }
+}
+
+function profile() {
+    global $mysqli_connection;
+
+    $token = $_GET['token'];
+    $sql = 'SELECT id, username, token FROM player WHERE token = ?';
+    $stmt = $mysqli_connection->prepare($sql);
+    $stmt->bind_param('s', $token);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    while ($row = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
+        print json_encode([
+        'id' => $row['id'], 
+        'username' => $row['username'],
+        'last_action' => $row['token']
+    ], 
+        JSON_PRETTY_PRINT);
     }
 }
 
