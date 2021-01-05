@@ -38,6 +38,6 @@ CREATE TABLE round (
     'AC', '2C', '3C', '4C', '5C', '6C', '7C', '8C', '9C', '0C', 'JC', 'QC', 'KC',
     'AH', '2H', '3H', '4H', '5H', '6H', '7H', '8H', '9H', '0H', 'JH', 'QH', 'KH'
   ),
-  deck_status ENUM ('deck', 'deck_top', 'board', 'p1_hand', 'p2_hand', 'p1_stack', 'p2_stack'),
+  deck_status ENUM ('deck', 'board_top', 'board', 'p1_hand', 'p2_hand', 'p1_stack', 'p2_stack'),
   PRIMARY KEY (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

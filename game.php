@@ -83,18 +83,24 @@ function start_game($input) {
       $stmt2 = $mysqli_connection->prepare($sql2);
       $stmt2->bind_param('iiss', $deck_id, $game_id, $deck_card, $deck_status2);
       $stmt2->execute();
-    } else if (count($deck) >= 36) {
+    } else if (count($deck) >= 37) {
       $deck_status3 = 'board';
       $sql3 = 'INSERT INTO round (deck_id, game_id, deck_card, deck_status) VALUES (?, ?, ?, ?)';
       $stmt3 = $mysqli_connection->prepare($sql3);
       $stmt3->bind_param('iiss', $deck_id, $game_id, $deck_card, $deck_status3);
       $stmt3->execute();
-    } else {
-      $deck_status4 = 'deck';
+    } else if (count($deck) >= 36 ) {
+      $deck_status4 = 'board_top';
       $sql4 = 'INSERT INTO round (deck_id, game_id, deck_card, deck_status) VALUES (?, ?, ?, ?)';
       $stmt4 = $mysqli_connection->prepare($sql4);
       $stmt4->bind_param('iiss', $deck_id, $game_id, $deck_card, $deck_status4);
       $stmt4->execute();
+    } else {
+      $deck_status5 = 'deck';
+      $sql5 = 'INSERT INTO round (deck_id, game_id, deck_card, deck_status) VALUES (?, ?, ?, ?)';
+      $stmt5 = $mysqli_connection->prepare($sql5);
+      $stmt5->bind_param('iiss', $deck_id, $game_id, $deck_card, $deck_status5);
+      $stmt5->execute();
     }
   }
 }

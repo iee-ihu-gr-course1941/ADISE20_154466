@@ -55,7 +55,7 @@ function login($method, $request, $input) {
         print json_encode(['token'=> $token]);
     } else {
         header('HTTP/1.1 400 Bad Request');
-        print json_encode(['errormesg' =>' Username or password is wrong.'], JSON_PRETTY_PRINT);
+        print json_encode(['errormesg' => 'Username or password is wrong.'], JSON_PRETTY_PRINT);
         exit;
     }
 }
