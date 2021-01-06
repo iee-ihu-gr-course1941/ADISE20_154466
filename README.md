@@ -90,6 +90,17 @@ POST /start-game/
 }
 ```
 
+#### Get game status
+
+```
+GET /game-status/
+
+Query params: game_id: {game_id}, game_id: {deck_id}
+
+e.g. /game-status?game_id={int}&deck_id={int}
+
+```
+
 #### Get cards of a player or 'board'
 
 ```
