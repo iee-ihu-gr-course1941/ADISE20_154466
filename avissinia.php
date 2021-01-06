@@ -50,6 +50,11 @@ switch ($r) {
             start_game($input);
         }
         break;
+    case 'game-status': // Returns game status
+        if ($method == 'GET') {
+            game_status();
+        }
+        break;
     case 'get-cards': // Returns cards (params: game_id, deck_id, deck_status)
         if ($method == 'GET') { 
             get_cards();

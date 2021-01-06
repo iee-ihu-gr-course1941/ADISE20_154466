@@ -112,6 +112,24 @@ function start_game($input) {
   }
 }
 
+function game_status() {
+  global $mysqli_connection;
+
+  $game_id = $_GET['game_id'];
+  $deck_id = $_GET['deck_id'];
+  
+  $sql = 'SELECT * FROM game WHERE id = ? AND deck_id = ?';
+  $stmt = $mysqli_connection->prepare($sql);
+  $stmt->bind_param('ii', $game_id, $deck_id);
+  $stmt->execute();
+  $res = $stmt->get_result();
+  $game_status = $res->fetch_row()['1'];
+  header('Content-type: application/json');
+  print json_encode([
+    'game_status' => $game_status
+  ], JSON_PRETTY_PRINT);
+} 
+
 function get_cards() {
   global $mysqli_connection;
 
