@@ -60,10 +60,10 @@ function login($method, $request, $input) {
     }
 }
 
-function profile() {
+function profile($headers) {
     global $mysqli_connection;
 
-    $token = $_GET['token'];
+    $token = $headers['Authorization'];
     $sql = 'SELECT id, username, token FROM player WHERE token = ?';
     $stmt = $mysqli_connection->prepare($sql);
     $stmt->bind_param('s', $token);
@@ -125,7 +125,6 @@ function is_authorized($headers) {
     } else {
         header('WWW-Authenticate: Basic realm="My Realm"');
         header('HTTP/1.0 401 Unauthorized');
-        echo 'User Unauthorized';
         return false;
     }
 }
