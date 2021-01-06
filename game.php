@@ -59,9 +59,15 @@ function start_game($input) {
 	$stmt->bind_param('si', $game_status, $game_id);
   $stmt->execute();
   
-  // 'S': 'SPADES', 'D': 'DIAMONDS', 'H': 'HEARTS', 'C': 'CLUBS', 
-  // '0': '10',
-  // 'A': 'ACE', 'J': 'JACK', 'Q': 'QUEEN', 'K': 'KING', 
+  // 'S': 'SPADES' = Μπαστούνια (♠), 
+  // 'D': 'DIAMONDS' = Καρά (♦), 
+  // 'H': 'HEARTS' = Καρδιές (♥), 
+  // 'C': 'CLUBS' = Τριφύλλια (♣), 
+  // 'A': 'ACE' = Άσσος, 
+  // 'J': 'JACK' = Βαλές, 
+  // 'Q': 'QUEEN' = Ντάμα, 
+  // 'K': 'KING' = Ρήγας/Παπάς, 
+  // '0': '10' 
   $deck = array(
     'AS', '2S', '3S', '4S', '5S', '6S', '7S', '8S', '9S', '0S', 'JS', 'QS', 'KS',
     'AD', '2D', '3D', '4D', '5D', '6D', '7D', '8D', '9D', '0D', 'JD', 'QD', 'KD',
@@ -102,6 +108,27 @@ function start_game($input) {
       $stmt5->bind_param('iiss', $deck_id, $game_id, $deck_card, $deck_status5);
       $stmt5->execute();
     }
+  }
+}
+
+function get_cards() {
+  global $mysqli_connection;
+
+  $game_id = $_GET['game_id'];
+  $deck_id = $_GET['deck_id'];
+  $deck_status = $_GET['deck_status'];
+
+  $sql = 'SELECT * FROM round WHERE deck_id = ? AND game_id = ? AND deck_status = ?';
+  
+  $stmt = $mysqli_connection->prepare($sql);
+  $stmt->bind_param('iis', $deck_id, $game_id, $deck_status);
+  $stmt->execute();
+  $res = $stmt->get_result();
+
+  while ($row = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
+    print json_encode([
+      'card' => $row['deck_card']
+    ], JSON_PRETTY_PRINT);
   }
 }
 

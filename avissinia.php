@@ -33,10 +33,14 @@ switch ($r) {
             echo json_encode(is_authorized($headers));
         }
         break;
-    case 'profile':
-        if ($method == 'GET') { // Returns object contains id, username, last_action
-            profile();
-        }
+    case 'profile': // Returns object contains id, username, last_action
+        if (is_authorized($headers)) {
+            if ($method == 'GET') {
+                profile($headers);
+            }
+        } else {
+            echo json_encode(['errormesg:' => 'User Unauthorized'], JSON_PRETTY_PRINT);
+        }  
         break;
     case 'new-game': // Creates and sets game
         if ($method == 'POST') {
@@ -48,8 +52,13 @@ switch ($r) {
             start_game($input);
         }
         break;
+    case 'get-cards':
+        if ($method == 'GET') { // Returns cards (params: game_id, deck_id, deck_status)
+            get_cards();
+        }
+        break;
     default:
-        // header('HTTP/1.1 404 Not Found');
+        header('HTTP/1.1 404 Not Found');
         exit;
 }
 
