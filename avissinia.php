@@ -52,10 +52,19 @@ switch ($r) {
             start_game($input);
         }
         break;
-    case 'get-cards':
-        if ($method == 'GET') { // Returns cards (params: game_id, deck_id, deck_status)
+    case 'get-cards': // Returns cards (params: game_id, deck_id, deck_status)
+        if ($method == 'GET') { 
             get_cards();
         }
+        break;
+    case 'drop-card': // Player drops a card
+        if (is_authorized($headers)) {
+            if ($method == 'PUT') {
+                drop_card($input, $headers);
+            }
+        } else {
+            echo json_encode(['errormesg:' => 'User Unauthorized'], JSON_PRETTY_PRINT);
+        }  
         break;
     default:
         header('HTTP/1.1 404 Not Found');

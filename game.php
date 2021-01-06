@@ -117,9 +117,7 @@ function get_cards() {
   $game_id = $_GET['game_id'];
   $deck_id = $_GET['deck_id'];
   $deck_status = $_GET['deck_status'];
-
   $sql = 'SELECT * FROM round WHERE deck_id = ? AND game_id = ? AND deck_status = ?';
-  
   $stmt = $mysqli_connection->prepare($sql);
   $stmt->bind_param('iis', $deck_id, $game_id, $deck_status);
   $stmt->execute();
@@ -130,6 +128,42 @@ function get_cards() {
       'card' => $row['deck_card']
     ], JSON_PRETTY_PRINT);
   }
+}
+
+function drop_card($input, $headers) {
+  global $mysqli_connection;
+  $game_id = $input['game_id'];
+  $deck_id = $input['deck_id'];
+  $deck_card = $input['deck_card'];
+  $token = $headers['Authorization'];
+
+  // fetch current board top card
+  $deck_status = 'board_top';
+  $sql = 'SELECT * FROM round WHERE deck_id = ? AND game_id = ? AND deck_status = ?';
+	$stmt = $mysqli_connection->prepare($sql);
+	$stmt->bind_param('iis', $deck_id, $game_id, $deck_status);
+  $stmt->execute();
+  $res = $stmt->get_result();
+  $current_board_top_card = $res->fetch_row()['3'];
+
+  // update deck_status for old  board_top card
+  $deck_status1 = 'board';
+  $sql1 = 'UPDATE round SET deck_status = ? WHERE deck_id = ? AND game_id = ? AND deck_card = ?';
+	$stmt1 = $mysqli_connection->prepare($sql1);
+	$stmt1->bind_param('siis', $deck_status1, $deck_id, $game_id, $current_board_top_card);
+  $stmt1->execute();
+
+  // update deck_status to board_top for dropped card
+  $sql2 = 'UPDATE round SET deck_status = ? WHERE deck_id = ? AND game_id = ? AND deck_card = ?';
+	$stmt2 = $mysqli_connection->prepare($sql2);
+	$stmt2->bind_param('siis', $deck_status, $deck_id, $game_id, $deck_card);
+  $stmt2->execute();
+
+  // update last_action for player
+  $sql3 = 'UPDATE player SET last_action = now() WHERE token = ?';
+  $stmt3 = $mysqli_connection->prepare($sql3);
+	$stmt3->bind_param('s',  $token);
+  $stmt3->execute();
 }
 
 ?>
