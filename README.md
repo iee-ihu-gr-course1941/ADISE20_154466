@@ -112,9 +112,7 @@ key: Authorization, value: {token}
 
 ## Περιγραφή DB
 
-### Database entities
-
-#### player
+### player
 
 | Name | Type  | Description |
 | - | - | - |
@@ -124,14 +122,14 @@ key: Authorization, value: {token}
 | `token` | `varchar(255)` |  |
 | `last_action` | `timestamp` |  |
 
-#### deck
+### deck
 
 | Name | Type  | Description
 | - | - | - |
 | `id` | `int(20)` | PK |
 | `game_id` | `smallint(5)` | FK |
 
-#### game
+### game
 
 | Name | Type  | Description
 | - | - | - |
@@ -141,7 +139,7 @@ key: Authorization, value: {token}
 | `player2_id` | `smallint(5)` | FK |
 | `deck_id` | `smallint(5)` | FK |
 
-#### round
+### round
 
 | Name | Type  | Description
 | - | - | - |
