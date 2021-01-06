@@ -19,10 +19,9 @@
 γ) αν κρατάει στο χέρι του φύλλο όμοιο με τα φύλλα που βρίσκονται στην κορυφή της στοίβας ενός άλλου παίκτη, τότε μπορεί να το ρίξει και να πάρει τα φύλλα από την στοίβα του συγκεκριμένου παίκτη και να τα τοποθετήσει στην δική του στοίβα
 δ) αν κρατάει στο χέρι του φύλλο που είναι ίδιο με αυτά που έχει επάνω στην δική του στοίβα, μπορεί να ρίξει το φύλλο και να το προσθέσει σε αυτήν
 
-## Project url
+### Project url
 
-[Avissinia](https://users.iee.ihu.gr/~it154466/ADISE20_154466/)
-
+[Avissinia game](https://users.iee.ihu.gr/~it154466/ADISE20_154466/)
 
 ## Περιγραφή API
 
@@ -122,6 +121,21 @@ key: Authorization, value: {token}
     "game_id": {game_id},
     "deck_id": {deck_id},
     "deck_card": "{player's hand card}"
+}
+
+```
+
+
+#### Pick a card from the 'board'
+
+```
+PUT /pick-card/
+Headers: Authorization
+key: Authorization, value: {token}
+{
+    "game_id": {game_id},
+    "deck_id": {deck_id},
+    "deck_card": "{player's hand card same with board_top card}"
 }
 
 ```

@@ -67,6 +67,13 @@ switch ($r) {
             }
         }
         break;
+    case 'pick-card': // Player picks a card if it is same number
+        if (is_authorized($headers)) {
+            if ($method == 'PUT') {
+                pick_card($input, $headers);
+            }
+        }
+        break;
     default:
         header('HTTP/1.1 404 Not Found');
         exit;
