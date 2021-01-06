@@ -38,9 +38,7 @@ switch ($r) {
             if ($method == 'GET') {
                 profile($headers);
             }
-        } else {
-            echo json_encode(['errormesg:' => 'User Unauthorized'], JSON_PRETTY_PRINT);
-        }  
+        }
         break;
     case 'new-game': // Creates and sets game
         if ($method == 'POST') {
@@ -62,9 +60,7 @@ switch ($r) {
             if ($method == 'PUT') {
                 drop_card($input, $headers);
             }
-        } else {
-            echo json_encode(['errormesg:' => 'User Unauthorized'], JSON_PRETTY_PRINT);
-        }  
+        }
         break;
     default:
         header('HTTP/1.1 404 Not Found');

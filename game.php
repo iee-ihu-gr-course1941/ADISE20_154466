@@ -40,6 +40,7 @@ function new_game($input) {
 	$stmt4->bind_param('ii', $deck_id, $game_id);
   $stmt4->execute();
 
+  header('Content-type: application/json');
   print json_encode([
     'game_id' => $game_id, 
     'deck_id' => $deck_id,
@@ -123,6 +124,7 @@ function get_cards() {
   $stmt->execute();
   $res = $stmt->get_result();
 
+  header('Content-type: application/json');
   while ($row = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
     print json_encode([
       'card' => $row['deck_card']

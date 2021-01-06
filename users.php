@@ -29,7 +29,8 @@ function register($method, $request, $input) {
     $stmt1 = $mysqli_connection->prepare($sql1);
 	$stmt1->bind_param('s', $username);
 	$stmt1->execute();
-	$res = $stmt1->get_result();
+    $res = $stmt1->get_result();
+    header('Content-type: application/json');
 	print json_encode($res->fetch_all(MYSQLI_ASSOC), JSON_PRETTY_PRINT); // shouldn't return password or token
 }
 
@@ -52,6 +53,7 @@ function login($method, $request, $input) {
     if ($res->fetch_row()[1] == $username) { // not efficient way
         $token = token_return($username, $password);
         header('HTTP/1.1 200 OK');
+        header('Content-type: application/json');
         print json_encode(['token'=> $token]);
     } else {
         header('HTTP/1.1 400 Bad Request');
@@ -69,6 +71,7 @@ function profile($headers) {
     $stmt->bind_param('s', $token);
     $stmt->execute();
     $res = $stmt->get_result();
+    header('Content-type: application/json');
     while ($row = mysqli_fetch_array($res, MYSQLI_ASSOC)) {
         print json_encode([
         'id' => $row['id'], 
